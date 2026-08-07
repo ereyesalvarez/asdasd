@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-f5f4ddcf-e8d7-4dbe-86ed-d692322ae0b2/styles.css">
+  <script src="_ds/organic-f5f4ddcf-e8d7-4dbe-86ed-d692322ae0b2/_ds_bundle.js"></script>
+  <style>
+    body{margin:0}
+    ::selection{background:var(--color-accent-200)}
+    a{color:var(--color-accent-700)}
+    a:hover{color:var(--color-accent-900)}
+  </style>
+</helmet>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" title="Balance" hint-size="390px,844px">
+  <div style="background:var(--color-bg);min-height:100%;font-family:var(--font-body);color:var(--color-text);padding:20px 18px 48px;box-sizing:border-box">
+
+    <div style="margin-bottom:22px">
+      <div style="font:600 13px var(--font-body);color:var(--color-accent-700);letter-spacing:.02em;text-transform:uppercase">{{ monthLabel }}</div>
+      <div style="font:400 30px var(--font-heading);margin-top:2px">Your balance</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:10px">
+      <div class="card elev-sm" style="background:var(--color-accent-100);border:1px solid var(--color-accent-200)">
+        <div class="card-kicker">Savings this month</div>
+        <div class="card-title" style="font-size:30px">{{ savingsThisMonthDisplay }}</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <span class="{{ monthlySavingsTagClass }}">{{ monthlySavingsTagText }}</span>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--color-accent-200);display:flex;justify-content:space-between;align-items:center">
+          <span class="card-meta">This year: {{ annualSavingsDisplay }}</span>
+          <span class="{{ annualSavingsTagClass }}">{{ annualSavingsTagText }}</span>
+        </div>
+      </div>
+
+      <div class="card elev-sm" style="background:var(--color-accent-2-100);border:1px solid var(--color-accent-2-200)">
+        <div class="card-kicker">Net worth</div>
+        <div class="card-title" style="font-size:30px">{{ netWorthDisplay }}</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <span class="{{ monthlyNetWorthTagClass }}">{{ monthlyNetWorthTagText }}</span>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--color-accent-2-200);display:flex;justify-content:space-between;align-items:center">
+          <span class="card-meta">This year: {{ annualNetWorthDisplay }}</span>
+          <span class="{{ annualNetWorthTagClass }}">{{ annualNetWorthTagText }}</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="card-kicker">Contributed to date</div>
+          <div style="font:400 20px var(--font-heading)">{{ contributionDisplay }}</div>
+        </div>
+        <span class="tag tag-neutral">All accounts</span>
+      </div>
+    </div>
+
+    <div style="margin-top:32px">
+      <h2 style="font:400 20px var(--font-heading);margin:0 0 12px">Account status</h2>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div onClick="{{ cat.toggle }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer">
+              <div style="width:38px;height:38px;border-radius:999px;background:{{ cat.chipBg }};color:{{ cat.chipFg }};display:flex;align-items:center;justify-content:center;font:600 14px var(--font-body);flex:none">{{ cat.initial }}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font:600 15px var(--font-body)">{{ cat.label }}</div>
+                <div class="card-meta">{{ cat.accountCount }} accounts</div>
+              </div>
+              <div style="font:600 16px var(--font-body);white-space:nowrap">{{ cat.totalDisplay }}</div>
+              <div style="width:16px;text-align:center;color:var(--color-neutral-700);transform:{{ cat.chevronTransform }};transition:transform .15s">›</div>
+            </div>
+            <sc-if value="{{ cat.expanded }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--color-neutral-200)">
+                <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:6px;padding-top:10px;font:600 10px var(--font-body);color:var(--color-neutral-700);text-transform:uppercase;letter-spacing:.03em">
+                  <div>Account</div><div style="text-align:right">Balance</div><div style="text-align:right">Contrib.</div><div style="text-align:right">Gains</div>
+                </div>
+                <sc-for list="{{ cat.accounts }}" as="acc" hint-placeholder-count="2">
+                  <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:6px;font:400 13px var(--font-body)">
+                    <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ acc.name }}</div>
+                    <div style="text-align:right">{{ acc.balanceDisplay }}</div>
+                    <div style="text-align:right;color:var(--color-neutral-700)">{{ acc.contributedDisplay }}</div>
+                    <div style="text-align:right;color:var(--color-neutral-700)">{{ acc.gainsDisplay }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div onClick="{{ toggleOther }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer">
+            <div style="width:38px;height:38px;border-radius:999px;background:var(--color-neutral-200);color:var(--color-neutral-700);display:flex;align-items:center;justify-content:center;font:600 14px var(--font-body);flex:none">O</div>
+            <div style="flex:1;min-width:0">
+              <div style="font:600 15px var(--font-body)">Other</div>
+              <div class="card-meta">{{ otherItemsCount }} items</div>
+            </div>
+            <div style="font:600 16px var(--font-body);white-space:nowrap">{{ otherBalanceDisplay }}</div>
+            <div style="width:16px;text-align:center;color:var(--color-neutral-700);transform:{{ otherChevronTransform }};transition:transform .15s">›</div>
+          </div>
+          <sc-if value="{{ otherExpanded }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--color-neutral-200)">
+              <sc-for list="{{ otherItems }}" as="item" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;padding-top:10px;font:400 13px var(--font-body)">
+                  <span>{{ item.name }}</span>
+                  <span style="color:{{ item.color }}">{{ item.amountDisplay }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="font:400 20px var(--font-heading);margin:0">Fixed expenses</h2>
+        <span style="font:600 15px var(--font-body);color:var(--color-neutral-700)">{{ fixedTotalDisplay }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ fixedExpenses }}" as="fx" hint-placeholder-count="4">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div onClick="{{ fx.toggle }}" style="display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer">
+              <div style="flex:1;min-width:0">
+                <div style="font:600 14px var(--font-body)">{{ fx.name }}</div>
+                <sc-if value="{{ fx.shared }}" hint-placeholder-val="{{ false }}">
+                  <div class="card-meta">Split with {{ fx.splitWith }}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ fx.hasBadge }}" hint-placeholder-val="{{ false }}">
+                <span class="{{ fx.badgeClass }}">{{ fx.badgeText }}</span>
+              </sc-if>
+              <div style="font:600 15px var(--font-body);white-space:nowrap">{{ fx.amountDisplay }}</div>
+            </div>
+            <sc-if value="{{ fx.expanded }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 16px 14px;border-top:1px solid var(--color-neutral-200);display:flex;flex-direction:column;gap:6px;font:400 13px var(--font-body);color:var(--color-neutral-700)">
+                <div style="display:flex;justify-content:space-between;padding-top:10px"><span>Total bill</span><span>{{ fx.amountDisplay }}</span></div>
+                <div style="display:flex;justify-content:space-between"><span>Your share</span><span>{{ fx.myShareDisplay }}</span></div>
+                <div style="display:flex;justify-content:space-between"><span>Paid by</span><span>{{ fx.paidByDisplay }}</span></div>
+                <div style="display:flex;justify-content:space-between;font:600 13px var(--font-body);color:var(--color-text)"><span>Balance</span><span>{{ fx.settlementDisplay }}</span></div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ isAddingFixed }}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+          <input class="input" placeholder="Expense name" value="{{ newItemName }}" onChange="{{ changeNewName }}"></input>
+          <input class="input" type="number" placeholder="Monthly amount (\u20ac)" value="{{ newItemAmount }}" onChange="{{ changeNewAmount }}"></input>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="flex:1" onClick="{{ submitFixed }}">Add</button>
+            <button class="btn btn-ghost" onClick="{{ cancelAdd }}">Cancel</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isAddingFixedNot }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-secondary btn-block" style="margin-top:10px" onClick="{{ startAddFixed }}">+ Add fixed expense</button>
+      </sc-if>
+    </div>
+
+    <div style="margin-top:32px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="font:400 20px var(--font-heading);margin:0">Budgets</h2>
+        <span style="font:600 15px var(--font-body);color:var(--color-neutral-700)">{{ budgetRemainingTotalDisplay }} left</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ budgets }}" as="bg" hint-placeholder-count="3">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font:600 14px var(--font-body)">{{ bg.name }}</span>
+              <span class="card-meta">{{ bg.spentDisplay }} of {{ bg.budgetDisplay }}</span>
+            </div>
+            <div style="margin-top:8px;height:8px;border-radius:999px;background:var(--color-neutral-200);overflow:hidden">
+              <div style="height:100%;width:{{ bg.pct }}%;background:{{ bg.barColor }};border-radius:999px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <span class="{{ bg.statusClass }}">{{ bg.statusText }}</span>
+              <sc-if value="{{ bg.isLogging }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:6px;align-items:center">
+                  <input class="input" type="number" placeholder="\u20ac" style="width:70px;padding:6px 8px" value="{{ logAmount }}" onChange="{{ changeLogAmount }}"></input>
+                  <button class="btn btn-primary" style="padding:6px 10px" onClick="{{ bg.submitLog }}">Log</button>
+                  <button class="btn btn-ghost" style="padding:6px 8px" onClick="{{ cancelLog }}">✕</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ bg.isNotLogging }}" hint-placeholder-val="{{ true }}">
+                <button class="btn btn-ghost" style="padding:5px 10px;font-size:12px" onClick="{{ bg.startLog }}">Log spend</button>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ isAddingBudget }}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+          <input class="input" placeholder="Budget name" value="{{ newItemName }}" onChange="{{ changeNewName }}"></input>
+          <input class="input" type="number" placeholder="Budget amount (\u20ac)" value="{{ newItemAmount }}" onChange="{{ changeNewAmount }}"></input>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="flex:1" onClick="{{ submitBudget }}">Add</button>
+            <button class="btn btn-ghost" onClick="{{ cancelAdd }}">Cancel</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isAddingBudgetNot }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-secondary btn-block" style="margin-top:10px" onClick="{{ startAddBudget }}">+ Add budget</button>
+      </sc-if>
+    </div>
+
+    <div style="margin-top:32px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="font:400 20px var(--font-heading);margin:0">Other</h2>
+        <span style="font:600 15px var(--font-body);color:var(--color-neutral-700)">{{ otherBalanceDisplay }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ otherItems }}" as="item" hint-placeholder-count="2">
+          <div class="card" style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font:400 14px var(--font-body)">{{ item.name }}</span>
+            <span style="font:600 14px var(--font-body);color:{{ item.color }}">{{ item.amountDisplay }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ isAddingOther }}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+          <input class="input" placeholder="Description" value="{{ newItemName }}" onChange="{{ changeNewName }}"></input>
+          <input class="input" type="number" placeholder="Amount (\u20ac, use - for debt)" value="{{ newItemAmount }}" onChange="{{ changeNewAmount }}"></input>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="flex:1" onClick="{{ submitOther }}">Add</button>
+            <button class="btn btn-ghost" onClick="{{ cancelAdd }}">Cancel</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isAddingOtherNot }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-secondary btn-block" style="margin-top:10px" onClick="{{ startAddOther }}">+ Add item</button>
+      </sc-if>
+    </div>
+
+  </div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const fmt = (n) => {
+  const neg = n < 0;
+  const v = Math.abs(Math.round(n));
+  return (neg ? '-\u20ac' : '\u20ac') + v.toLocaleString('en-US');
+};
+const fmtSigned = (n) => (n >= 0 ? '+' : '') + fmt(n);
+
+class Component extends DCLogic {
+  state = {
+    expandedCategory: null,
+    otherExpanded: false,
+    logging: { index: null },
+    logAmount: '',
+    adding: null,
+    newItemName: '',
+    newItemAmount: '',
+    rawCategories: [
+      { key: 'cash', label: 'Cash', initial: 'C', accounts: [
+        { name: 'Checking account', balance: 4200, contributed: 0, realizedGains: 0 },
+        { name: 'Savings account', balance: 8500, contributed: 8500, realizedGains: 0 },
+        { name: 'Cash on hand', balance: 150, contributed: 0, realizedGains: 0 },
+      ]},
+      { key: 'funds', label: 'Funds', initial: 'F', accounts: [
+        { name: 'Index fund A', balance: 15200, contributed: 12000, realizedGains: 3200 },
+        { name: 'Index fund B', balance: 6800, contributed: 6500, realizedGains: 300 },
+      ]},
+      { key: 'stocks', label: 'Stocks', initial: 'S', accounts: [
+        { name: 'Brokerage account', balance: 9400, contributed: 7000, realizedGains: 2400 },
+      ]},
+      { key: 'pension', label: 'Pension plan', initial: 'P', accounts: [
+        { name: 'Company pension plan', balance: 22000, contributed: 18000, realizedGains: 4000 },
+      ]},
+      { key: 'rsu', label: 'RSU', initial: 'R', accounts: [
+        { name: 'Vested RSUs', balance: 11500, contributed: 9000, realizedGains: 2500 },
+      ]},
+    ],
+    fixedRaw: [
+      { name: 'Mortgage', amount: 1200, shared: false },
+      { name: 'Electricity', amount: 100, shared: true, splitWith: 'Alex', myShare: 50, paidByMe: 100 },
+      { name: 'Water', amount: 60, shared: true, splitWith: 'Alex', myShare: 30, paidByMe: 0 },
+      { name: 'Internet', amount: 45, shared: false },
+      { name: 'Gym membership', amount: 35, shared: false },
+    ],
+    budgetsRaw: [
+      { name: 'Groceries', budget: 400, spent: 180 },
+      { name: 'Dining out', budget: 150, spent: 95 },
+      { name: 'Transport', budget: 100, spent: 40 },
+    ],
+    otherRaw: [
+      { name: 'Lucas owes me', amount: 100 },
+      { name: 'Concert refund pending', amount: -40 },
+    ],
+    goals: { monthlySavings: 600, monthlyNetWorth: 1000, annualSavings: 5000, annualNetWorth: 10000 },
+    prevMonth: { savings: 27400, netWorth: 76500 },
+    prevYear: { savings: 24000, netWorth: 68000 },
+  };
+
+  toggleCategory(key) {
+    this.setState(s => ({ expandedCategory: s.expandedCategory === key ? null : key, otherExpanded: false }));
+  }
+  toggleOther() {
+    this.setState(s => ({ otherExpanded: !s.otherExpanded, expandedCategory: null }));
+  }
+  toggleFixed(i) {
+    this.setState(s => ({ expandedFixed: s.expandedFixed === i ? null : i }));
+  }
+  startAdd(section) { this.setState({ adding: section, newItemName: '', newItemAmount: '' }); }
+  cancelAdd() { this.setState({ adding: null, newItemName: '', newItemAmount: '' }); }
+  submitAdd(section) {
+    const name = this.state.newItemName.trim();
+    const amt = parseFloat(this.state.newItemAmount);
+    if (!name || isNaN(amt)) { this.setState({ adding: null }); return; }
+    if (section === 'fixed') {
+      this.setState(s => ({ fixedRaw: [...s.fixedRaw, { name, amount: amt, shared: false }], adding: null, newItemName: '', newItemAmount: '' }));
+    } else if (section === 'budget') {
+      this.setState(s => ({ budgetsRaw: [...s.budgetsRaw, { name, budget: amt, spent: 0 }], adding: null, newItemName: '', newItemAmount: '' }));
+    } else if (section === 'other') {
+      this.setState(s => ({ otherRaw: [...s.otherRaw, { name, amount: amt }], adding: null, newItemName: '', newItemAmount: '' }));
+    }
+  }
+  startLog(i) { this.setState({ logging: { index: i }, logAmount: '' }); }
+  cancelLog() { this.setState({ logging: { index: null }, logAmount: '' }); }
+  submitLog(i) {
+    const v = parseFloat(this.state.logAmount);
+    if (isNaN(v)) { this.setState({ logging: { index: null } }); return; }
+    this.setState(s => ({
+      budgetsRaw: s.budgetsRaw.map((b, idx) => idx === i ? { ...b, spent: b.spent + v } : b),
+      logging: { index: null }, logAmount: ''
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const catAgg = s.rawCategories.map(c => {
+      const totals = c.accounts.reduce((a, x) => ({
+        balance: a.balance + x.balance, contributed: a.contributed + x.contributed, gains: a.gains + x.realizedGains
+      }), { balance: 0, contributed: 0, gains: 0 });
+      return { ...c, totals, total: totals.balance + totals.contributed + totals.gains };
+    });
+
+    const savingsNow = catAgg.filter(c => c.key === 'cash' || c.key === 'funds' || c.key === 'stocks')
+      .reduce((a, c) => a + (c.totals.contributed - c.totals.gains), 0);
+    const contributionNow = catAgg.reduce((a, c) => a + c.totals.contributed, 0);
+    const balanceSum = catAgg.reduce((a, c) => a + c.totals.balance, 0);
+    const otherBalance = s.otherRaw.reduce((a, x) => a + x.amount, 0);
+    const netReceivables = s.fixedRaw.reduce((a, f) => {
+      if (!f.shared) return a;
+      const owed = f.paidByMe - (f.amount - f.myShare);
+      return a + owed;
+    }, 0);
+    const netWorthNow = balanceSum + otherBalance + netReceivables;
+
+    const monthlySavingsDelta = savingsNow - s.prevMonth.savings;
+    const monthlyNetWorthDelta = netWorthNow - s.prevMonth.netWorth;
+    const annualSavingsDelta = savingsNow - s.prevYear.savings;
+    const annualNetWorthDelta = netWorthNow - s.prevYear.netWorth;
+
+    const goalTag = (delta, goal) => {
+      const ahead = delta >= goal;
+      return {
+        cls: 'tag ' + (ahead ? 'tag-accent-2' : 'tag-outline'),
+        text: ahead ? 'On track \u00b7 ' + fmtSigned(delta - goal) + ' vs goal' : fmt(goal - delta) + ' behind goal'
+      };
+    };
+    const msTag = goalTag(monthlySavingsDelta, s.goals.monthlySavings);
+    const mnTag = goalTag(monthlyNetWorthDelta, s.goals.monthlyNetWorth);
+    const asTag = goalTag(annualSavingsDelta, s.goals.annualSavings);
+    const anTag = goalTag(annualNetWorthDelta, s.goals.annualNetWorth);
+
+    const chipColors = {
+      cash: ['var(--color-accent-2-200)', 'var(--color-accent-2-800)'],
+      funds: ['var(--color-accent-200)', 'var(--color-accent-800)'],
+      stocks: ['var(--color-neutral-300)', 'var(--color-neutral-800)'],
+      pension: ['var(--color-accent-2-300)', 'var(--color-accent-2-900)'],
+      rsu: ['var(--color-accent-300)', 'var(--color-accent-900)'],
+    };
+
+    const categories = catAgg.map(c => ({
+      key: c.key, label: c.label, initial: c.initial,
+      accountCount: c.accounts.length,
+      totalDisplay: fmt(c.total),
+      expanded: s.expandedCategory === c.key,
+      chevronTransform: s.expandedCategory === c.key ? 'rotate(90deg)' : 'rotate(0deg)',
+      chipBg: chipColors[c.key][0], chipFg: chipColors[c.key][1],
+      toggle: () => this.toggleCategory(c.key),
+      accounts: c.accounts.map(a => ({
+        name: a.name, balanceDisplay: fmt(a.balance), contributedDisplay: fmt(a.contributed), gainsDisplay: fmt(a.realizedGains)
+      }))
+    }));
+
+    const fixedExpenses = s.fixedRaw.map((f, i) => {
+      const owed = f.shared ? f.paidByMe - (f.amount - f.myShare) : 0;
+      let badgeText = '', badgeClass = '';
+      if (f.shared && owed > 0) { badgeText = f.splitWith + ' owes ' + fmt(owed); badgeClass = 'tag tag-accent-2'; }
+      else if (f.shared && owed < 0) { badgeText = 'You owe ' + fmt(-owed); badgeClass = 'tag tag-outline'; }
+      return {
+        name: f.name, shared: f.shared, splitWith: f.splitWith || '',
+        amountDisplay: fmt(f.amount),
+        hasBadge: !!badgeText, badgeText, badgeClass,
+        expanded: s.expandedFixed === i,
+        toggle: () => this.toggleFixed(i),
+        myShareDisplay: f.shared ? fmt(f.myShare) : fmt(f.amount),
+        paidByDisplay: f.shared ? (f.paidByMe === f.amount ? 'You' : (f.paidByMe === 0 ? f.splitWith : 'Split')) : 'You',
+        settlementDisplay: f.shared ? (owed >= 0 ? f.splitWith + ' owes you ' + fmt(owed) : 'You owe ' + f.splitWith + ' ' + fmt(-owed)) : 'Settled'
+      };
+    });
+    const fixedTotal = s.fixedRaw.reduce((a, f) => a + f.amount, 0);
+
+    const budgets = s.budgetsRaw.map((b, i) => {
+      const pct = Math.min(100, Math.round((b.spent / b.budget) * 100));
+      const over = b.spent > b.budget;
+      return {
+        name: b.name, spentDisplay: fmt(b.spent), budgetDisplay: fmt(b.budget), pct,
+        barColor: over ? 'var(--color-accent-600)' : 'var(--color-accent-2-600)',
+        statusClass: 'tag ' + (over ? 'tag-outline' : 'tag-neutral'),
+        statusText: over ? fmt(b.spent - b.budget) + ' over' : fmt(b.budget - b.spent) + ' left',
+        isLogging: s.logging.index === i, isNotLogging: s.logging.index !== i,
+        startLog: () => this.startLog(i), submitLog: () => this.submitLog(i)
+      };
+    });
+    const budgetRemainingTotal = s.budgetsRaw.reduce((a, b) => a + Math.max(0, b.budget - b.spent), 0);
+
+    const otherItems = s.otherRaw.map(o => ({
+      name: o.name, amountDisplay: fmtSigned(o.amount),
+      color: o.amount >= 0 ? 'var(--color-accent-2-700)' : 'var(--color-accent-700)'
+    }));
+
+    return {
+      monthLabel: 'August 2026',
+      savingsThisMonthDisplay: fmt(savingsNow),
+      monthlySavingsTagClass: msTag.cls, monthlySavingsTagText: fmtSigned(monthlySavingsDelta) + ' this month',
+      annualSavingsDisplay: fmt(savingsNow),
+      annualSavingsTagClass: asTag.cls, annualSavingsTagText: asTag.text,
+      netWorthDisplay: fmt(netWorthNow),
+      monthlyNetWorthTagClass: mnTag.cls, monthlyNetWorthTagText: fmtSigned(monthlyNetWorthDelta) + ' this month',
+      annualNetWorthDisplay: fmt(netWorthNow),
+      annualNetWorthTagClass: anTag.cls, annualNetWorthTagText: anTag.text,
+      contributionDisplay: fmt(contributionNow),
+      categories,
+      toggleOther: () => this.toggleOther(),
+      otherExpanded: s.otherExpanded,
+      otherChevronTransform: s.otherExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+      otherItemsCount: s.otherRaw.length,
+      otherBalanceDisplay: fmt(otherBalance),
+      otherItems,
+      fixedExpenses, fixedTotalDisplay: fmt(fixedTotal),
+      isAddingFixed: s.adding === 'fixed', isAddingFixedNot: s.adding !== 'fixed',
+      startAddFixed: () => this.startAdd('fixed'), submitFixed: () => this.submitAdd('fixed'),
+      budgets, budgetRemainingTotalDisplay: fmt(budgetRemainingTotal),
+      isAddingBudget: s.adding === 'budget', isAddingBudgetNot: s.adding !== 'budget',
+      startAddBudget: () => this.startAdd('budget'), submitBudget: () => this.submitAdd('budget'),
+      isAddingOther: s.adding === 'other', isAddingOtherNot: s.adding !== 'other',
+      startAddOther: () => this.startAdd('other'), submitOther: () => this.submitAdd('other'),
+      cancelAdd: () => this.cancelAdd(),
+      newItemName: s.newItemName, newItemAmount: s.newItemAmount,
+      changeNewName: (e) => this.setState({ newItemName: e.target.value }),
+      changeNewAmount: (e) => this.setState({ newItemAmount: e.target.value }),
+      logAmount: s.logAmount, changeLogAmount: (e) => this.setState({ logAmount: e.target.value }),
+      cancelLog: () => this.cancelLog(),
+    };
+  }
+}
+</script>
+</body>
+</html>
