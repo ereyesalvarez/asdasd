@@ -18,45 +18,35 @@
   </style>
 </helmet>
 
-<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" title="Balance" hint-size="390px,844px">
-  <div style="background:var(--color-bg);min-height:100%;font-family:var(--font-body);color:var(--color-text);padding:20px 18px 48px;box-sizing:border-box">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="390px,844px">
+  <div style="background:var(--color-bg);min-height:100%;font-family:var(--font-body);color:var(--color-text);padding:56px 18px 48px;box-sizing:border-box">
 
-    <div style="margin-bottom:22px">
-      <div style="font:600 13px var(--font-body);color:var(--color-accent-700);letter-spacing:.02em;text-transform:uppercase">{{ monthLabel }}</div>
-      <div style="font:400 30px var(--font-heading);margin-top:2px">Your balance</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <span style="font:600 12px var(--font-body);color:var(--color-accent-700);letter-spacing:.03em;text-transform:uppercase">{{ monthLabel }}</span>
+      <button class="btn btn-icon" style="width:32px;height:32px;font-size:16px;line-height:1">⋯</button>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:10px">
-      <div class="card elev-sm" style="background:var(--color-accent-100);border:1px solid var(--color-accent-200)">
-        <div class="card-kicker">Savings this month</div>
-        <div class="card-title" style="font-size:30px">{{ savingsThisMonthDisplay }}</div>
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <span class="{{ monthlySavingsTagClass }}">{{ monthlySavingsTagText }}</span>
-        </div>
-        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--color-accent-200);display:flex;justify-content:space-between;align-items:center">
-          <span class="card-meta">This year: {{ annualSavingsDisplay }}</span>
-          <span class="{{ annualSavingsTagClass }}">{{ annualSavingsTagText }}</span>
-        </div>
-      </div>
-
-      <div class="card elev-sm" style="background:var(--color-accent-2-100);border:1px solid var(--color-accent-2-200)">
-        <div class="card-kicker">Net worth</div>
-        <div class="card-title" style="font-size:30px">{{ netWorthDisplay }}</div>
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <span class="{{ monthlyNetWorthTagClass }}">{{ monthlyNetWorthTagText }}</span>
-        </div>
-        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--color-accent-2-200);display:flex;justify-content:space-between;align-items:center">
-          <span class="card-meta">This year: {{ annualNetWorthDisplay }}</span>
-          <span class="{{ annualNetWorthTagClass }}">{{ annualNetWorthTagText }}</span>
-        </div>
-      </div>
-
-      <div class="card" style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+    <div class="card elev-sm" style="padding:14px 16px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
         <div>
-          <div class="card-kicker">Contributed to date</div>
-          <div style="font:400 20px var(--font-heading)">{{ contributionDisplay }}</div>
+          <div class="card-kicker">Savings</div>
+          <div style="font:400 19px var(--font-heading);margin-top:2px">{{ savingsThisMonthDisplay }}</div>
+          <span class="{{ monthlySavingsTagClass }}" style="margin-top:5px;font-size:11px;padding:2px 7px">{{ monthlySavingsDeltaShort }}</span>
         </div>
-        <span class="tag tag-neutral">All accounts</span>
+        <div>
+          <div class="card-kicker">Net worth</div>
+          <div style="font:400 19px var(--font-heading);margin-top:2px">{{ netWorthDisplay }}</div>
+          <span class="{{ monthlyNetWorthTagClass }}" style="margin-top:5px;font-size:11px;padding:2px 7px">{{ monthlyNetWorthDeltaShort }}</span>
+        </div>
+        <div>
+          <div class="card-kicker">Contributed</div>
+          <div style="font:400 19px var(--font-heading);margin-top:2px">{{ contributionDisplay }}</div>
+          <span class="tag tag-neutral" style="margin-top:5px;font-size:11px;padding:2px 7px">To date</span>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--color-neutral-200);display:flex;justify-content:space-between;gap:8px;font:400 11px var(--font-body);color:var(--color-neutral-700)">
+        <span>Year savings {{ annualSavingsDeltaShort }}</span>
+        <span>Year net worth {{ annualNetWorthDeltaShort }}</span>
       </div>
     </div>
 
@@ -134,14 +124,41 @@
               <sc-if value="{{ fx.hasBadge }}" hint-placeholder-val="{{ false }}">
                 <span class="{{ fx.badgeClass }}">{{ fx.badgeText }}</span>
               </sc-if>
+              <span class="{{ fx.paidTagClass }}">{{ fx.paidTagText }}</span>
               <div style="font:600 15px var(--font-body);white-space:nowrap">{{ fx.amountDisplay }}</div>
             </div>
             <sc-if value="{{ fx.expanded }}" hint-placeholder-val="{{ false }}">
-              <div style="padding:0 16px 14px;border-top:1px solid var(--color-neutral-200);display:flex;flex-direction:column;gap:6px;font:400 13px var(--font-body);color:var(--color-neutral-700)">
-                <div style="display:flex;justify-content:space-between;padding-top:10px"><span>Total bill</span><span>{{ fx.amountDisplay }}</span></div>
-                <div style="display:flex;justify-content:space-between"><span>Your share</span><span>{{ fx.myShareDisplay }}</span></div>
-                <div style="display:flex;justify-content:space-between"><span>Paid by</span><span>{{ fx.paidByDisplay }}</span></div>
-                <div style="display:flex;justify-content:space-between;font:600 13px var(--font-body);color:var(--color-text)"><span>Balance</span><span>{{ fx.settlementDisplay }}</span></div>
+              <div style="padding:0 16px 14px;border-top:1px solid var(--color-neutral-200);display:flex;flex-direction:column;gap:8px;font:400 13px var(--font-body);color:var(--color-neutral-700)">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px">
+                  <span>Total bill</span>
+                  <sc-if value="{{ fx.isEditing }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input class="input" type="number" style="width:90px;padding:5px 8px" value="{{ editAmountValue }}" onChange="{{ changeEditAmount }}"></input>
+                      <button class="btn btn-primary" style="padding:5px 9px" onClick="{{ fx.saveAmount }}">Save</button>
+                      <button class="btn btn-ghost" style="padding:5px 7px" onClick="{{ cancelEditAmount }}">✕</button>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ fx.isNotEditing }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;gap:8px;align-items:center">
+                      <span>{{ fx.amountDisplay }}</span>
+                      <button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onClick="{{ fx.startEditAmount }}">Edit</button>
+                    </div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ fx.shared }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;justify-content:space-between"><span>Your share</span><span>{{ fx.myShareDisplay }}</span></div>
+                  <div style="display:flex;justify-content:space-between"><span>Paid by</span><span>{{ fx.paidByDisplay }}</span></div>
+                </sc-if>
+                <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px var(--font-body);color:var(--color-text)">
+                  <span>Balance</span>
+                  <span>{{ fx.settlementDisplay }}</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:2px">
+                  <button class="{{ fx.paidBtnClass }}" style="flex:1;font-size:12px;padding:8px" onClick="{{ fx.togglePaid }}">{{ fx.paidBtnText }}</button>
+                  <sc-if value="{{ fx.canSettle }}" hint-placeholder-val="{{ false }}">
+                    <button class="btn btn-secondary" style="flex:1;font-size:12px;padding:8px" onClick="{{ fx.settle }}">{{ fx.settleBtnText }}</button>
+                  </sc-if>
+                </div>
               </div>
             </sc-if>
           </div>
@@ -277,12 +294,14 @@ class Component extends DCLogic {
       ]},
     ],
     fixedRaw: [
-      { name: 'Mortgage', amount: 1200, shared: false },
-      { name: 'Electricity', amount: 100, shared: true, splitWith: 'Alex', myShare: 50, paidByMe: 100 },
-      { name: 'Water', amount: 60, shared: true, splitWith: 'Alex', myShare: 30, paidByMe: 0 },
-      { name: 'Internet', amount: 45, shared: false },
-      { name: 'Gym membership', amount: 35, shared: false },
+      { name: 'Mortgage', amount: 1200, shared: false, paid: true },
+      { name: 'Electricity', amount: 100, shared: true, splitWith: 'Alex', myShare: 50, paidByMe: 100, paid: true, settled: false },
+      { name: 'Water', amount: 60, shared: true, splitWith: 'Alex', myShare: 30, paidByMe: 0, paid: true, settled: false },
+      { name: 'Internet', amount: 45, shared: false, paid: true },
+      { name: 'Gym membership', amount: 35, shared: false, paid: false },
     ],
+    editingFixed: null,
+    editAmountValue: '',
     budgetsRaw: [
       { name: 'Groceries', budget: 400, spent: 180 },
       { name: 'Dining out', budget: 150, spent: 95 },
@@ -305,6 +324,25 @@ class Component extends DCLogic {
   }
   toggleFixed(i) {
     this.setState(s => ({ expandedFixed: s.expandedFixed === i ? null : i }));
+  }
+  togglePaid(i) {
+    this.setState(s => ({ fixedRaw: s.fixedRaw.map((f, idx) => idx === i ? { ...f, paid: !f.paid } : f) }));
+  }
+  settleFixed(i) {
+    this.setState(s => ({ fixedRaw: s.fixedRaw.map((f, idx) => idx === i ? { ...f, settled: true } : f) }));
+  }
+  startEditAmount(i) {
+    const f = this.state.fixedRaw[i];
+    this.setState({ editingFixed: i, editAmountValue: String(f.amount) });
+  }
+  cancelEditAmount() { this.setState({ editingFixed: null, editAmountValue: '' }); }
+  saveAmount(i) {
+    const v = parseFloat(this.state.editAmountValue);
+    if (isNaN(v)) { this.setState({ editingFixed: null }); return; }
+    this.setState(s => ({
+      fixedRaw: s.fixedRaw.map((f, idx) => idx === i ? { ...f, amount: v } : f),
+      editingFixed: null, editAmountValue: ''
+    }));
   }
   startAdd(section) { this.setState({ adding: section, newItemName: '', newItemAmount: '' }); }
   cancelAdd() { this.setState({ adding: null, newItemName: '', newItemAmount: '' }); }
@@ -346,7 +384,7 @@ class Component extends DCLogic {
     const balanceSum = catAgg.reduce((a, c) => a + c.totals.balance, 0);
     const otherBalance = s.otherRaw.reduce((a, x) => a + x.amount, 0);
     const netReceivables = s.fixedRaw.reduce((a, f) => {
-      if (!f.shared) return a;
+      if (!f.shared || f.settled) return a;
       const owed = f.paidByMe - (f.amount - f.myShare);
       return a + owed;
     }, 0);
@@ -391,7 +429,7 @@ class Component extends DCLogic {
     }));
 
     const fixedExpenses = s.fixedRaw.map((f, i) => {
-      const owed = f.shared ? f.paidByMe - (f.amount - f.myShare) : 0;
+      const owed = (f.shared && !f.settled) ? f.paidByMe - (f.amount - f.myShare) : 0;
       let badgeText = '', badgeClass = '';
       if (f.shared && owed > 0) { badgeText = f.splitWith + ' owes ' + fmt(owed); badgeClass = 'tag tag-accent-2'; }
       else if (f.shared && owed < 0) { badgeText = 'You owe ' + fmt(-owed); badgeClass = 'tag tag-outline'; }
@@ -401,9 +439,19 @@ class Component extends DCLogic {
         hasBadge: !!badgeText, badgeText, badgeClass,
         expanded: s.expandedFixed === i,
         toggle: () => this.toggleFixed(i),
+        isEditing: s.editingFixed === i, isNotEditing: s.editingFixed !== i,
+        startEditAmount: () => this.startEditAmount(i), saveAmount: () => this.saveAmount(i),
         myShareDisplay: f.shared ? fmt(f.myShare) : fmt(f.amount),
         paidByDisplay: f.shared ? (f.paidByMe === f.amount ? 'You' : (f.paidByMe === 0 ? f.splitWith : 'Split')) : 'You',
-        settlementDisplay: f.shared ? (owed >= 0 ? f.splitWith + ' owes you ' + fmt(owed) : 'You owe ' + f.splitWith + ' ' + fmt(-owed)) : 'Settled'
+        settlementDisplay: !f.shared ? 'N/A' : (f.settled ? 'Settled' : (owed >= 0 ? f.splitWith + ' owes you ' + fmt(owed) : 'You owe ' + f.splitWith + ' ' + fmt(-owed))),
+        paidTagClass: 'tag ' + (f.paid ? 'tag-accent-2' : 'tag-outline'),
+        paidTagText: f.paid ? 'Paid' : 'Unpaid',
+        paidBtnClass: 'btn ' + (f.paid ? 'btn-ghost' : 'btn-primary'),
+        paidBtnText: f.paid ? 'Mark unpaid' : 'Mark as paid',
+        togglePaid: () => this.togglePaid(i),
+        canSettle: f.shared && owed !== 0 && !f.settled,
+        settleBtnText: owed > 0 ? 'Mark received' : 'Mark paid back',
+        settle: () => this.settleFixed(i)
       };
     });
     const fixedTotal = s.fixedRaw.reduce((a, f) => a + f.amount, 0);
@@ -431,12 +479,16 @@ class Component extends DCLogic {
       monthLabel: 'August 2026',
       savingsThisMonthDisplay: fmt(savingsNow),
       monthlySavingsTagClass: msTag.cls, monthlySavingsTagText: fmtSigned(monthlySavingsDelta) + ' this month',
+      monthlySavingsDeltaShort: fmtSigned(monthlySavingsDelta),
       annualSavingsDisplay: fmt(savingsNow),
       annualSavingsTagClass: asTag.cls, annualSavingsTagText: asTag.text,
+      annualSavingsDeltaShort: fmtSigned(annualSavingsDelta),
       netWorthDisplay: fmt(netWorthNow),
       monthlyNetWorthTagClass: mnTag.cls, monthlyNetWorthTagText: fmtSigned(monthlyNetWorthDelta) + ' this month',
+      monthlyNetWorthDeltaShort: fmtSigned(monthlyNetWorthDelta),
       annualNetWorthDisplay: fmt(netWorthNow),
       annualNetWorthTagClass: anTag.cls, annualNetWorthTagText: anTag.text,
+      annualNetWorthDeltaShort: fmtSigned(annualNetWorthDelta),
       contributionDisplay: fmt(contributionNow),
       categories,
       toggleOther: () => this.toggleOther(),
@@ -459,6 +511,8 @@ class Component extends DCLogic {
       changeNewAmount: (e) => this.setState({ newItemAmount: e.target.value }),
       logAmount: s.logAmount, changeLogAmount: (e) => this.setState({ logAmount: e.target.value }),
       cancelLog: () => this.cancelLog(),
+      editAmountValue: s.editAmountValue, changeEditAmount: (e) => this.setState({ editAmountValue: e.target.value }),
+      cancelEditAmount: () => this.cancelEditAmount(),
     };
   }
 }
